@@ -1,0 +1,24 @@
+url = https://us-central1-gmailapi-394514.cloudfunctions.net/GmailServiceApi
+
+
+const fetchdetails = ()=>{
+    data.map(msg =>{
+      axios.get("https://us-central1-gmailapi-394514.cloudfunctions.net/GmailServiceApi/api/getMessage?messageId="+msg.id)
+      .then((res:any)=>{
+        if(res.data.message.labelIds.includes("INBOX")){
+            setDetailData((data)=>[
+              ...data,
+              {
+                id: msg.id,
+                subject: res.data?.message?.headers?.subject || "Subject not found",
+                from: res.data?.message?.headers?.from || "From Unknown",
+                date: res.data?.message?.headers?.date || "Date not found",
+                textPlain: res.data?.message?.textPlain || "Text not found",
+                snippet: res.data?.message?.snippet || "Not found",
+              }
+            ]);
+      } })
+      .catch(err => console.error(err));
+    });
+  }
+  
